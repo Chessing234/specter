@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+# SPECTER — thin wrapper around gh, docker, uv, npm, vercel (run from repo root).
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT"
+
+usage() {
+  sed -n '1,120p' <<'EOF'
+Usage: ./scripts/specter <command>
+
+  help              Show this help
+  status            gh repo + last CI runs + docker compose ps
+  ci                List recent GitHub Actions runs
+  ci-watch [id]     Watch latest (or given) run until complete
+  pr-list           Open-style: gh pr list
+  release-list      gh release list (if any)
+
+  backend-test      uv run pytest (packages/backend)
+  backend-lint      ruff check + format --check
+  frontend-check    npm ci (if needed) + lint + type-check + build
+
+  up                docker compose up -d db redis
+  down              docker compose down
+
+  vercel-prod       npx vercel deploy --prod --yes (needs scope; see frontend/.vercel or env)
+EOF
+}
+
+cmd="${1:-help}"
+shift || true
+
+case "$cmd" in
+  help|-h|--help) usage ;;
+  status)
+    echo "== GitHub =="
+    gh repo view --json nameWithOwner,url,visibility,pushedAt --jq .
+    echo
+    echo "== CI (last 6) =="
+    gh run list -L 6
+    echo
+    echo "== Docker compose =="
+    docker compose ps 2>/dev/null || echo "(docker compose unavailable or no daemon)"
+    ;;
+  ci) gh run list -L 12 ;;
+  ci-watch)
+    id="${1:-}"
+    if [[ -n "$id" ]]; then
+      gh run watch "$id" --exit-status
+    else
+      rid="$(gh run list -L 1 --json databaseId -q '.[0].databaseId')"
+      gh run watch "$rid" --exit-status
+    fi
+    ;;
+  pr-list) gh pr list -L 20 ;;
+  release-list) gh release list -L 10 2>/dev/null || echo "No releases yet." ;;
+  backend-test)
+    cd packages/backend && uv run pytest tests/ -q
+    ;;
+  backend-lint)
+    cd packages/backend && uv run ruff check src/ tests/ && uv run ruff format --check src/ tests/
+    ;;
+  frontend-check)
+    cd frontend && npm ci && npm run lint && npm run type-check && npm run build
+    ;;
+  up) docker compose up -d db redis ;;
+  down) docker compose down ;;
+  vercel-prod)
+    scope="${VERCEL_SCOPE:-}"
+    if [[ -z "$scope" ]]; then
+      echo "Set VERCEL_SCOPE to your Vercel team slug, e.g.:" >&2
+      echo "  VERCEL_SCOPE=takshkothari09-5470s-projects ./scripts/specter vercel-prod" >&2
+      exit 1
+    fi
+    cd frontend && npx --yes vercel@latest deploy --prod --yes --scope "$scope"
+    ;;
+  *) echo "Unknown command: $cmd" >&2; usage; exit 1 ;;
+esac
