@@ -1,0 +1,124 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test-backend:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: specter
+          POSTGRES_PASSWORD: specter
+          POSTGRES_DB: specter_test
+        options: >-
+          --health-cmd "pg_isready -U specter -d specter_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+
+      - name: Sync backend environment
+        working-directory: packages/backend
+        run: uv sync --all-extras
+
+      - name: Run tests
+        working-directory: packages/backend
+        env:
+          DATABASE_URL: postgresql://specter:specter@localhost:5432/specter_test
+          REDIS_URL: redis://localhost:6379/0
+        run: uv run pytest tests/ -v --cov=specter --cov-report=xml
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v4
+        if: success()
+        continue-on-error: true
+        with:
+          files: packages/backend/coverage.xml
+          fail_ci_if_error: false
+
+  lint-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Sync backend environment
+        working-directory: packages/backend
+        run: uv sync --all-extras
+
+      - name: Ruff check
+        working-directory: packages/backend
+        run: uv run ruff check src/ tests/
+
+      - name: Ruff format
+        working-directory: packages/backend
+        run: uv run ruff format --check src/ tests/
+
+  typecheck-backend:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Sync backend environment
+        working-directory: packages/backend
+        run: uv sync --all-extras
+
+      - name: Mypy (informational)
+        working-directory: packages/backend
+        run: uv run mypy src/specter
+
+  test-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Lint
+        working-directory: frontend
+        run: npm run lint
+
+      - name: Type check
+        working-directory: frontend
+        run: npm run type-check
+
+      - name: Build
+        working-directory: frontend
+        run: npm run build

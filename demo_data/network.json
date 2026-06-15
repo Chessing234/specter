@@ -1,0 +1,14 @@
+[
+  {
+    "source": "prod-web-01",
+    "target": "prod-db-01",
+    "protocol": "tcp",
+    "description": "Application to database"
+  },
+  {
+    "source": "prod-web-01",
+    "target": "prod-cache-01",
+    "protocol": "tcp",
+    "description": "Cache tier"
+  }
+]

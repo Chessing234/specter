@@ -1,0 +1,26 @@
+[
+  {
+    "user_id": "admin@company.com",
+    "name": "Admin User",
+    "email": "admin@company.com",
+    "department": "IT",
+    "role": "System Administrator",
+    "typical_login_times": ["08:00-09:00", "13:00-18:00"],
+    "typical_locations": ["New York, US"],
+    "typical_devices": ["CORP-LAPTOP-001"],
+    "accessed_assets": ["prod-web-01", "prod-db-01"],
+    "status": "active"
+  },
+  {
+    "user_id": "moscow-contractor@company.com",
+    "name": "Ivan Petrov",
+    "email": "moscow-contractor@company.com",
+    "department": "Engineering",
+    "role": "DevOps Contractor",
+    "typical_login_times": ["02:00-06:00"],
+    "typical_locations": ["Moscow, Russia"],
+    "typical_devices": ["PERSONAL-MAC"],
+    "accessed_assets": ["dev-web-01"],
+    "status": "active"
+  }
+]

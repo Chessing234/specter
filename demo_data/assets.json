@@ -1,0 +1,45 @@
+[
+  {
+    "name": "prod-db-01",
+    "type": "database",
+    "criticality": "critical",
+    "environment": "production",
+    "owner": "data-team",
+    "ip": "10.0.2.10",
+    "tags": ["database", "production", "postgres", "crown-jewel"],
+    "connected_to": [],
+    "source": "aws_rds"
+  },
+  {
+    "name": "prod-cache-01",
+    "type": "cache",
+    "criticality": "high",
+    "environment": "production",
+    "owner": "platform-team",
+    "ip": "10.0.1.20",
+    "tags": ["cache", "redis"],
+    "connected_to": [],
+    "source": "aws_elasticache"
+  },
+  {
+    "name": "prod-web-01",
+    "type": "server",
+    "criticality": "critical",
+    "environment": "production",
+    "owner": "platform-team",
+    "ip": "10.0.1.5",
+    "tags": ["web", "production", "eu-west", "public-facing"],
+    "connected_to": ["prod-db-01", "prod-cache-01"],
+    "source": "aws_ec2"
+  },
+  {
+    "name": "dev-web-01",
+    "type": "server",
+    "criticality": "low",
+    "environment": "development",
+    "owner": "dev-team",
+    "ip": "10.0.3.5",
+    "tags": ["web", "development"],
+    "source": "aws_ec2"
+  }
+]

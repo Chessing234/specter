@@ -1,0 +1,11 @@
+[
+  {
+    "name": "APT-DEMO-01",
+    "type": "apt",
+    "ttps": ["T1078", "T1486"],
+    "iocs": ["185.220.101.7", "malware.example.bad"],
+    "description": "Synthetic threat actor for hackathon demos",
+    "confidence": 0.75,
+    "source": "demo_feed"
+  }
+]

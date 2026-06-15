@@ -1,0 +1,7 @@
+[project]
+name = "specter-monorepo"
+version = "0.1.0"
+description = "SPECTER monorepo — install the Python backend from packages/backend"
+requires-python = ">=3.12"
+readme = "README.md"
+dependencies = []

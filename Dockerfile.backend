@@ -1,0 +1,24 @@
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    postgresql-client \
+    libpq-dev \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install uv for fast Python package management
+RUN pip install uv
+
+# Copy backend package (src required before editable install with hatchling)
+COPY packages/backend/pyproject.toml .
+COPY packages/backend/src ./src
+
+RUN uv pip install --system -e ".[dev]"
+
+EXPOSE 8000
+
+CMD ["uvicorn", "specter.main:app", "--host", "0.0.0.0", "--port", "8000"]
