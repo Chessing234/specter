@@ -419,9 +419,7 @@ When asked for JSON, return JSON only (no markdown fences)."""
         messages = [
             SystemMessage(content=self.get_system_prompt()),
             HumanMessage(
-                content=(
-                    "Write 3 short bullets for a CISO: what to fix first. Data:\n" + blob
-                ),
+                content=("Write 3 short bullets for a CISO: what to fix first. Data:\n" + blob),
             ),
         ]
         try:
@@ -485,7 +483,7 @@ When asked for JSON, return JSON only (no markdown fences)."""
             blocks.append("\n".join(chunk))
         body = "\n".join(blocks)
         return (
-            "<!DOCTYPE html><html><head><meta charset=\"utf-8\"/>"
+            '<!DOCTYPE html><html><head><meta charset="utf-8"/>'
             "<title>SPECTER — Audit report</title></head><body>"
             f"{body}</body></html>"
         )

@@ -256,9 +256,7 @@ Return JSON only (no fences) with:
         disk_image = str(raw_data["disk_image"])
         findings: list[dict[str, Any]] = []
 
-        mft = _mcp_data(
-            await self._call_mcp("extract_mft_timeline", {"disk_image": disk_image})
-        )
+        mft = _mcp_data(await self._call_mcp("extract_mft_timeline", {"disk_image": disk_image}))
         timeline = mft.get("timeline") or []
         if timeline:
             suspicious = any("evil" in str(e).lower() for e in timeline)
@@ -308,9 +306,7 @@ Return JSON only (no fences) with:
         memory_dump = str(raw_data["memory_dump"])
         findings: list[dict[str, Any]] = []
 
-        pslist = _mcp_data(
-            await self._call_mcp("volatility_pslist", {"memory_dump": memory_dump})
-        )
+        pslist = _mcp_data(await self._call_mcp("volatility_pslist", {"memory_dump": memory_dump}))
         sp = pslist.get("suspicious_processes") or []
         if sp:
             findings.append(

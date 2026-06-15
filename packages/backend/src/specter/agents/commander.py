@@ -84,9 +84,7 @@ Return JSON only (no fences) describing phases with name, tasks (list), duration
         try:
             scope = self._assess_scope(fd)
             containment = self._determine_containment(scope, fd)
-            response_plan = await self._generate_response_plan(
-                incident, scope, containment, fd
-            )
+            response_plan = await self._generate_response_plan(incident, scope, containment, fd)
             sla = self._calculate_sla(scope)
 
             self._complete_action(
@@ -211,14 +209,14 @@ Return JSON only (no fences) describing phases with name, tasks (list), duration
 Incident response plan:
 
 TITLE: {incident.title}
-SEVERITY: {scope['severity']}
-BLAST_RADIUS: {scope['blast_radius']}
-AFFECTED_SYSTEMS: {scope['affected_systems_count']}
+SEVERITY: {scope["severity"]}
+BLAST_RADIUS: {scope["blast_radius"]}
+AFFECTED_SYSTEMS: {scope["affected_systems_count"]}
 
 CONTAINMENT:
-action_required={containment['action_required']}
-urgency={containment['urgency']}
-actions={containment['actions']}
+action_required={containment["action_required"]}
+urgency={containment["urgency"]}
+actions={containment["actions"]}
 
 FINDINGS (sample): {finding_sample}
 """

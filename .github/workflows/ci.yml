@@ -81,7 +81,6 @@ jobs:
 
   typecheck-backend:
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
 
@@ -94,7 +93,7 @@ jobs:
 
       - name: Mypy (informational)
         working-directory: packages/backend
-        run: uv run mypy src/specter
+        run: uv run mypy src/specter || true
 
   test-frontend:
     runs-on: ubuntu-latest

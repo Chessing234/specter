@@ -572,15 +572,12 @@ class SplunkAdapter(MCPAdapter):
         if severity != "all":
             filters.append(f'severity="{severity}"')
         filt = " AND ".join(filters) if filters else "1=1"
-        spl = (
-            f'| inputlookup notable_events.csv where {filt} '
-            f"| head {max_results}"
-        )
+        spl = f"| inputlookup notable_events.csv where {filt} | head {max_results}"
         try:
             raw = await self._run_search_job(spl, time_range, "now", max_results)
         except Exception:  # noqa: BLE001
             raw = await self._run_search_job(
-                f'index=_internal earliest={time_range} | head {max_results}',
+                f"index=_internal earliest={time_range} | head {max_results}",
                 time_range,
                 "now",
                 max_results,
@@ -671,7 +668,7 @@ class SplunkAdapter(MCPAdapter):
         user = str(params["user"])
         time_range = str(params.get("time_range", "-30d"))
         activities = params.get("activities") or ["login", "file_access"]
-        act_filter = " OR ".join(f'action=*{a}*' for a in activities)
+        act_filter = " OR ".join(f"action=*{a}*" for a in activities)
         spl = (
             f'index=* earliest={time_range} (user="{user}" OR src_user="{user}") '
             f"({act_filter}) "
@@ -704,10 +701,7 @@ class SplunkAdapter(MCPAdapter):
             "email": "email",
         }
         field = field_map.get(ioc_type, "indicator")
-        spl = (
-            f'| inputlookup threat_intel.csv WHERE {field}="{ioc_value}" '
-            "| head 20"
-        )
+        spl = f'| inputlookup threat_intel.csv WHERE {field}="{ioc_value}" | head 20'
         try:
             raw = await self._run_search_job(spl, "-90d", "now", 20)
         except Exception:  # noqa: BLE001
@@ -759,12 +753,12 @@ class SplunkAdapter(MCPAdapter):
                         "dest_port": "443",
                         "count": "234",
                     },
-                {
-                    "src_ip": "10.0.1.5",
-                    "dest_ip": "8.8.8.8",
-                    "dest_port": "53",
-                    "count": "1200",
-                },
+                    {
+                        "src_ip": "10.0.1.5",
+                        "dest_ip": "8.8.8.8",
+                        "dest_port": "53",
+                        "count": "1200",
+                    },
                 ],
                 "result_count": 2,
                 "fields": ["src_ip", "dest_ip", "dest_port", "count"],
