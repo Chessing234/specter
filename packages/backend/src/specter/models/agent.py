@@ -1,10 +1,14 @@
 """Agent-related Pydantic models."""
 
-from datetime import datetime
+from datetime import UTC, datetime
 from enum import StrEnum
 from typing import Any, Literal
 
 from pydantic import BaseModel, Field
+
+
+def _utcnow() -> datetime:
+    return datetime.now(UTC)
 
 
 class AgentType(StrEnum):
@@ -35,7 +39,7 @@ class AgentMessage(BaseModel):
     to_agent: AgentType | None = Field(None, description="Target agent (None = broadcast)")
     message_type: Literal["task", "response", "alert", "status", "evidence"] = "task"
     content: dict[str, Any] = Field(default_factory=dict)
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    timestamp: datetime = Field(default_factory=_utcnow)
     priority: int = Field(default=5, ge=1, le=10, description="1 = highest, 10 = lowest")
     correlation_id: str | None = Field(None, description="Links related messages")
 
@@ -49,7 +53,7 @@ class AgentAction(BaseModel):
     tool_used: str | None = None
     input_params: dict[str, Any] = Field(default_factory=dict)
     output: dict[str, Any] | None = None
-    started_at: datetime = Field(default_factory=datetime.utcnow)
+    started_at: datetime = Field(default_factory=_utcnow)
     completed_at: datetime | None = None
     status: Literal["pending", "running", "completed", "failed"] = "pending"
     error_message: str | None = None

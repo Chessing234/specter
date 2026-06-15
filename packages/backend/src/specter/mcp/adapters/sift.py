@@ -1,4 +1,4 @@
-"""SANS SIFT Workstation MCP adapter for SPECTER (FIND EVIL! / hackathon).
+"""SANS SIFT Workstation MCP adapter for SPECTER.
 
 Typed, read-only MCP tools — no generic shell execution from agents.
 Evidence paths on the local filesystem are copied before use when present.

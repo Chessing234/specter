@@ -1,10 +1,14 @@
 """Incident-related Pydantic models."""
 
-from datetime import datetime
+from datetime import UTC, datetime
 from enum import StrEnum
 from typing import Any
 
 from pydantic import BaseModel, Field
+
+
+def _utcnow() -> datetime:
+    return datetime.now(UTC)
 
 
 class Severity(StrEnum):
@@ -40,8 +44,8 @@ class Incident(BaseModel):
     findings: list[dict[str, Any]] = Field(default_factory=list)
     assigned_agent: str | None = None
     confidence_score: float = Field(default=0.0, ge=0.0, le=1.0)
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=_utcnow)
+    updated_at: datetime = Field(default_factory=_utcnow)
     resolved_at: datetime | None = None
 
 
@@ -56,4 +60,4 @@ class Finding(BaseModel):
     evidence: list[dict[str, Any]] = Field(default_factory=list)
     confidence: float = Field(ge=0.0, le=1.0)
     verified: bool = False
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=_utcnow)

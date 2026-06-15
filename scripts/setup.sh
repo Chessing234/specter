@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# SPECTER — hackathon / local setup (Docker + uv + npm)
+# SPECTER — local setup (Docker + uv + npm)
 
 set -euo pipefail
 

@@ -96,7 +96,7 @@ One-shot local bootstrap:
 ./scripts/setup.sh
 ```
 
-Load hackathon demo fixtures into memory (after DB is up):
+Load sample fixtures into memory (after DB is up):
 
 ```bash
 make demo-data
@@ -113,6 +113,10 @@ make demo-data
 | `make lint` / `make format` | Ruff |
 | `make build` | `docker compose build` |
 | `make deploy-vercel` | `vercel --prod` from `frontend/` |
+
+## CLI helper (`gh`, Docker, `uv`, npm, Vercel)
+
+From repo root, use **`./scripts/specter`** for common flows (see `./scripts/specter help`). Examples: `./scripts/specter status`, `./scripts/specter ci`, `./scripts/specter backend-test`.
 
 ## Next
 
