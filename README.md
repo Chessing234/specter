@@ -114,6 +114,10 @@ make demo-data
 | `make build` | `docker compose build` |
 | `make deploy-vercel` | `vercel --prod` from `frontend/` |
 
+## CLI helper (`gh`, Docker, `uv`, npm, Vercel)
+
+From repo root, use **`./scripts/specter`** for common flows (see `./scripts/specter help`). Examples: `./scripts/specter status`, `./scripts/specter ci`, `./scripts/specter backend-test`.
+
 ## Next
 
 See **Prompt 04** — MCP router and protocol infrastructure. Agents can load context with `get_knowledge_graph().get_context_for_incident(...)`.
