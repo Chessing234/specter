@@ -96,7 +96,7 @@ One-shot local bootstrap:
 ./scripts/setup.sh
 ```
 
-Load hackathon demo fixtures into memory (after DB is up):
+Load sample fixtures into memory (after DB is up):
 
 ```bash
 make demo-data

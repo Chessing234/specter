@@ -1,10 +1,14 @@
 """Evidence and audit trail models."""
 
-from datetime import datetime
+from datetime import UTC, datetime
 from enum import StrEnum
 from typing import Any
 
 from pydantic import BaseModel, Field
+
+
+def _utcnow() -> datetime:
+    return datetime.now(UTC)
 
 
 class EvidenceType(StrEnum):
@@ -29,7 +33,7 @@ class Evidence(BaseModel):
     raw_data: dict[str, Any]
     interpreted_data: dict[str, Any] | None = None
     chain_of_custody: list[dict[str, Any]] = Field(default_factory=list)
-    collected_at: datetime = Field(default_factory=datetime.utcnow)
+    collected_at: datetime = Field(default_factory=_utcnow)
     integrity_hash: str | None = None
 
 
@@ -37,7 +41,7 @@ class AuditLogEntry(BaseModel):
     """An entry in the audit trail."""
 
     id: str
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    timestamp: datetime = Field(default_factory=_utcnow)
     agent: str
     action: str
     target: str | None = None

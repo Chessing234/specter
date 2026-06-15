@@ -1,4 +1,4 @@
-"""Splunk MCP adapter for SPECTER (Agentic Ops / hackathon).
+"""Splunk MCP adapter for SPECTER.
 
 Typed tools over the Splunk REST API (httpx), optional Splunk MCP Server base URL
 for NL→SPL, and structured mock output when Splunk is unreachable or credentials

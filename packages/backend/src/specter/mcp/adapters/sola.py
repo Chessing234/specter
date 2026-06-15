@@ -1,8 +1,8 @@
-"""Sola Security MCP adapter for SPECTER (Boring Security / hackathon).
+"""Sola Security MCP adapter for SPECTER.
 
 Typed tools for access reviews, compliance evidence, identity hygiene, cloud
 assets, and risk scoring. Uses the Sola HTTP API when reachable; otherwise
-returns structured mock payloads suitable for demos and tests.
+returns structured mock payloads suitable for offline use and tests.
 """
 
 from __future__ import annotations

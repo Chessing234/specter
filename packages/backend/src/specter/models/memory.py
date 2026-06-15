@@ -1,10 +1,14 @@
 """Organizational Memory Fabric models."""
 
-from datetime import datetime
+from datetime import UTC, datetime
 from enum import StrEnum
 from typing import Any
 
 from pydantic import BaseModel, Field
+
+
+def _utcnow() -> datetime:
+    return datetime.now(UTC)
 
 
 class EntityType(StrEnum):
@@ -42,8 +46,8 @@ class MemoryEntity(BaseModel):
     vector_embedding: list[float] | None = None
     source: str = "manual"
     confidence: float = Field(default=1.0, ge=0.0, le=1.0)
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=_utcnow)
+    updated_at: datetime = Field(default_factory=_utcnow)
     last_seen: datetime | None = None
 
 
@@ -56,7 +60,7 @@ class MemoryRelationship(BaseModel):
     relationship_type: RelationshipType
     properties: dict[str, Any] = Field(default_factory=dict)
     confidence: float = Field(default=1.0, ge=0.0, le=1.0)
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=_utcnow)
 
 
 class UserBaseline(BaseModel):
@@ -69,5 +73,5 @@ class UserBaseline(BaseModel):
     accessed_assets: list[str] = Field(default_factory=list)
     risk_score: float = Field(default=0.0, ge=0.0, le=1.0)
     last_access_review: datetime | None = None
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=_utcnow)
+    updated_at: datetime = Field(default_factory=_utcnow)

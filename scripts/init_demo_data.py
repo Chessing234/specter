@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Load demo organizational memory data for hackathon demos (Aurora DSQL / Postgres)."""
+"""Load sample organizational memory data into storage (Aurora DSQL / Postgres)."""
 
 from __future__ import annotations
 

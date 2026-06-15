@@ -25,7 +25,7 @@ export default function SettingsPage() {
           <code className="rounded bg-muted px-1 py-0.5">/api/*</code> to your backend when{" "}
           <code className="rounded bg-muted px-1 py-0.5">API_PROXY_TARGET</code> or{" "}
           <code className="rounded bg-muted px-1 py-0.5">NEXT_PUBLIC_API_URL</code> is set — useful
-          for avoiding CORS during demos.
+          for avoiding CORS in browser clients.
         </p>
         <p>
           <strong className="text-foreground">Aurora DSQL</strong>: the API persists incidents,
