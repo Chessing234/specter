@@ -58,6 +58,19 @@ export function useWebSocket() {
             };
             return [...prev.slice(-(MAX_EVENTS - 1)), next];
           });
+        } else if (data.type === "incident_complete") {
+          setEvents((prev) => {
+            const next: AgentEvent = {
+              type: "incident_complete",
+              from: "specter",
+              to: null,
+              message_type: "status",
+              content: data as Record<string, unknown>,
+              timestamp: new Date().toISOString(),
+              correlation_id: (data.incident_id as string | null) ?? null,
+            };
+            return [...prev.slice(-(MAX_EVENTS - 1)), next];
+          });
         }
       } catch {
         /* ignore malformed */

@@ -9,6 +9,16 @@ export interface AgentStatus {
   capabilities: string[];
 }
 
+export interface WorkflowMessage {
+  id: string;
+  from_agent: string;
+  to_agent: string | null;
+  message_type: string;
+  content: Record<string, unknown>;
+  timestamp: string;
+  priority?: number;
+}
+
 export interface Incident {
   id: string;
   title: string;
@@ -19,8 +29,13 @@ export interface Incident {
   created_at: string;
   updated_at?: string;
   assigned_agent: string | null;
-  /** Optional until backend exposes it on list/detail responses */
   confidence_score?: number;
+  raw_data?: Record<string, unknown>;
+  current_phase?: string | null;
+  messages?: WorkflowMessage[];
+  findings?: Record<string, unknown>[];
+  memory_context?: Record<string, unknown>;
+  actions?: Record<string, unknown>[];
 }
 
 export interface MemoryEntity {
@@ -107,6 +122,12 @@ export const api = {
     fetchApi<Incident>("/api/v1/incidents/", {
       method: "POST",
       body: JSON.stringify(data),
+    }),
+
+  createDemoIncident: () =>
+    fetchApi<Incident>("/api/v1/incidents/demo", {
+      method: "POST",
+      body: JSON.stringify({}),
     }),
 
   queryMemory: (query: string, entityType?: string, limit?: number) =>
