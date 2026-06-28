@@ -1,5 +1,6 @@
 import { AgentStatusPanel } from "@/components/dashboard/AgentStatusPanel";
 import { DashboardStats } from "@/components/dashboard/DashboardStats";
+import { DemoTrigger } from "@/components/dashboard/DemoTrigger";
 import { RealtimeActivity } from "@/components/dashboard/RealtimeActivity";
 import { RecentIncidents } from "@/components/dashboard/RecentIncidents";
 import { api } from "@/lib/api";
@@ -19,6 +20,8 @@ export default async function DashboardPage() {
           operations overview with incidents, agent fleet, and live bus activity.
         </p>
       </header>
+
+      <DemoTrigger />
 
       <DashboardStats incidents={incidents} agents={agents} />
 

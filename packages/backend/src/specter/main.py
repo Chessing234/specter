@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from specter.api import agents, health, incidents, memory, websocket
 from specter.config import get_settings
+from specter.services.runtime import bootstrap_specter
 
 settings = get_settings()
 
@@ -14,10 +15,11 @@ settings = get_settings()
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan manager."""
-    # Startup
     print(f"Starting {settings.app_name} in {settings.environment} mode")
+    await bootstrap_specter(app)
     yield
-    # Shutdown
+    for task in getattr(app.state, "background_tasks", set()):
+        task.cancel()
     print(f"Shutting down {settings.app_name}")
 
 

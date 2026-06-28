@@ -60,7 +60,6 @@ def get_session_factory() -> async_sessionmaker[AsyncSession]:
             get_engine(),
             class_=AsyncSession,
             expire_on_commit=False,
-            autobegin=False,
         )
     return _async_session_factory
 

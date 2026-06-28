@@ -163,6 +163,47 @@ class UserBaselineORM(Base):
         }
 
 
+class IncidentORM(Base):
+    """Active incident records with LangGraph workflow state."""
+
+    __tablename__ = "incidents"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        PGUUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    title: Mapped[str] = mapped_column(String(500), nullable=False)
+    description: Mapped[str] = mapped_column(Text, nullable=False)
+    severity: Mapped[str] = mapped_column(String(20), nullable=False, index=True)
+    status: Mapped[str] = mapped_column(String(30), nullable=False, index=True)
+    source: Mapped[str] = mapped_column(String(100), nullable=False)
+    raw_data: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict)
+    assigned_agent: Mapped[str | None] = mapped_column(String(50), nullable=True)
+    confidence_score: Mapped[float] = mapped_column(Float, default=0.0)
+    workflow_state: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=_utcnow, onupdate=_utcnow
+    )
+    resolved_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "id": str(self.id),
+            "title": self.title,
+            "description": self.description,
+            "severity": self.severity,
+            "status": self.status,
+            "source": self.source,
+            "raw_data": self.raw_data or {},
+            "assigned_agent": self.assigned_agent,
+            "confidence_score": self.confidence_score,
+            "workflow_state": self.workflow_state,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
+            "resolved_at": self.resolved_at.isoformat() if self.resolved_at else None,
+        }
+
+
 class IncidentHistoryORM(Base):
     """Historical incidents for pattern recognition."""
 

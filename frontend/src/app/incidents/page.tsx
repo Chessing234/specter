@@ -37,9 +37,11 @@ export default async function IncidentsPage() {
                   colSpan={5}
                   className="p-8 text-center text-muted-foreground"
                 >
-                  No incidents loaded. Backend{" "}
-                  <code className="rounded bg-muted px-1">GET /api/v1/incidents/</code>{" "}
-                  returns data when wired to Aurora DSQL / store.
+                  No incidents yet. Use{" "}
+                  <Link href="/" className="text-primary hover:underline">
+                    Simulate breach
+                  </Link>{" "}
+                  on the dashboard to run a live demo.
                 </td>
               </tr>
             ) : (
